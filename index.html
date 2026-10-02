@@ -195,6 +195,13 @@ const BANDS = {
   b6:{code:"B6", scope:"Owns a {dept} function, its strategy and multiple teams; part of the broader management group.", exp:"Roughly 8+ years, with 3+ in management."}
 };
 
+// IC-track overrides for band scope + experience
+const BANDS_IC = {
+  b4:{code:"B4", scope:"Same band as a {dept} Team Lead, but leads through craft rather than a team — no direct reports.", exp:"Roughly 4–6 years."},
+  b5:{code:"B5", scope:"A peer of the {dept} Manager; decisions reach adjacent teams and the wider business — with no direct reports.", exp:"Roughly 6+ years."},
+  b6:{code:"B6", scope:"A peer of the {dept} Senior Manager; shapes the function's strategy through expertise — with no direct reports.", exp:"Roughly 8+ years, with a record of org-wide impact."}
+};
+
 // Core competencies — descriptions tuned by tier. tiers: foundation,core,advanced,lead,senior,principal
 const CORE = [
   ["Craft & Execution",{
@@ -203,60 +210,70 @@ const CORE = [
     advanced:"Owns end-to-end output across a channel or corridor and sets the quality bar for it.",
     lead:"Defines the playbook and standards for a domain; owns the hardest work in it.",
     senior:"Defines what 'good' means for the whole discipline; work others model themselves on.",
-    principal:"Accountable for the quality of everything the function ships."}],
+    principal:"Accountable for the quality of everything the function ships.",
+    principalIC:"Defines what excellent looks like for the discipline across Pesa; their work is the reference others use."}],
   ["Communication & Influence",{
     foundation:"Communicates clearly, asks good clarifying questions, and flags issues early.",
     core:"Adapts the message to the audience and makes sound, well-argued recommendations.",
     advanced:"Tailors and defends ideas while keeping relationships; gains commitment from others.",
     lead:"Builds buy-in across disciplines and brings contributors along.",
     senior:"Builds influence strategies that shift senior stakeholders; commands the room.",
-    principal:"Sets a culture of open, honest communication across the function."}],
+    principal:"Sets a culture of open, honest communication across the function.",
+    principalIC:"Shapes senior and leadership decisions through clear, persuasive argument."}],
   ["Planning & Project Management",{
     foundation:"Manages own workload to deadlines and follows simple workflows.",
     core:"Plans and prioritises a varied workload; manages small projects.",
     advanced:"Leads multi-part projects with several contributors from start to finish.",
     lead:"Owns the plan for a domain; anticipates risks and dependencies.",
     senior:"Turns strategy into achievable programmes; manages large, complex work.",
-    principal:"Aligns plans across teams to longer-term business goals."}],
+    principal:"Aligns plans across teams to longer-term business goals.",
+    principalIC:"Shapes multi-year plans for the discipline and the programmes that deliver them."}],
   ["Problem-Solving & Judgement",{
     foundation:"Solves clearly defined problems and proposes on-brief solutions.",
     core:"Weighs options and recognises when to deviate from standard practice.",
     advanced:"Gets to root causes, spots flaws in data and arguments, and tests new approaches.",
     lead:"Owns ambiguous problems for a domain and chooses well under uncertainty.",
     senior:"Takes a systemic view of long-range problems and reshapes process to fix them for good.",
-    principal:"Fosters an owning-outcomes approach to problems across the function."}],
+    principal:"Fosters an owning-outcomes approach to problems across the function.",
+    principalIC:"Takes on the business's most ambiguous problems in the discipline and resolves them for good."}],
   ["Collaboration & Teamwork",{
     foundation:"Collaborates well, is open to feedback, and brings a positive presence.",
     core:"Actively involves others; requests work from Design, Data and Content clearly and on time.",
     advanced:"Resolves differences to win-win outcomes; mentors juniors.",
     lead:"Builds cross-functional relationships with Sales, Support and Product.",
     senior:"A trusted node in wider decisions across Pesa.",
-    principal:"Builds synergy across teams and geographies."}],
+    principal:"Builds synergy across teams and geographies.",
+    principalIC:"A trusted partner to leaders across teams and geographies."}],
   ["Data, Measurement & Storytelling",{
     foundation:"Grasps key metrics and reports with templates and guidance.",
     core:"Tracks core metrics and explains what happened.",
     advanced:"Interprets metrics, explains anomalies, and tests on the data.",
     lead:"Reads a funnel and distinguishes a quick fix from a roadmap item.",
     senior:"Distils complex data into a narrative that wins support and changes direction.",
-    principal:"Sets the KPIs and reporting plan for the function."}],
+    principal:"Sets the KPIs and reporting plan for the function.",
+    principalIC:"Defines how the discipline measures success and tells its story to leadership."}],
   ["Business & Corridor Acumen",{
     foundation:"Understands the product and who our senders are; basic corridor awareness.",
     core:"Connects daily work to a corridor's goals; aware of compliance limits — consent, regional rules, no overpromising on fees or FX.",
     advanced:"Reads corridor economics and the competitive landscape.",
     lead:"Weighs corridor levers and ROI when setting the approach.",
     senior:"Shapes strategy from market insight; weighs corridor ROI against company priorities.",
-    principal:"Sets direction from a deep read of the market and the corridor portfolio."}]
+    principal:"Sets direction from a deep read of the market and the corridor portfolio.",
+    principalIC:"Shapes direction from a deep read of the market and the corridor portfolio."}]
 ];
 const TIER = {b1:"foundation",b2:"core",b3:"advanced",b4:"lead",b5:"senior",b6:"principal"};
 
 // Track add-on skills
 const TRACK = {
-  ic_lead:[
-    ["Technical Depth & Standard-Setting","Recognised inside Pesa as an authority; defines best practice and raises the bar."],
-    ["Influence Without Authority","Drives adoption across teams through expertise and credibility, not management."]],
-  ic_senior:[
+  ic_b4:[
+    ["Technical Depth & Standard-Setting","The team's go-to expert for a domain; sets the craft standard through example and review."],
+    ["Influence Without Authority","Brings peers along through expertise and mentoring, not management."]],
+  ic_b5:[
+    ["Technical Depth & Standard-Setting","Recognised across Pesa as an authority; defines best practice and raises the bar."],
+    ["Influence Without Authority","Drives adoption across teams through expertise and credibility."]],
+  ic_b6:[
     ["Technical Depth & Standard-Setting","A principal craft authority inside and beyond Pesa; defines best practice org-wide."],
-    ["Influence Without Authority","Impact far beyond own projects; lifts the whole team without managing anyone."]],
+    ["Influence Without Authority","Shapes leadership decisions and lifts the whole department without managing anyone."]],
   people_lead:[
     ["People Leadership & Coaching","Runs a small team day-to-day; assigns and reviews work, coaches, supports development with guidance."],
     ["Finance & Budget","Begins owning a budget line; tracks spend against return."]],
@@ -273,16 +290,18 @@ const NODES = [
   {rung:"b1", band:"b1", track:"shared", x:80,  y:262, lab:["Coordinator"], pos:"above"},
   {rung:"b2", band:"b2", track:"shared", x:240, y:262, lab:["Specialist"], pos:"above"},
   {rung:"b3", band:"b3", track:"shared", x:402, y:262, lab:["Senior","Specialist"], pos:"above"},
-  {rung:"b4ic", band:"b4", track:"ic", x:606, y:142, lab:["Manager (IC)"], pos:"above"},
-  {rung:"b5ic", band:"b5", track:"ic", x:784, y:142, lab:["Senior Mgr (IC)"], pos:"above"},
+  {rung:"b4ic", band:"b4", track:"ic", x:606, y:142, lab:["Lead (IC)"], pos:"above"},
+  {rung:"b5ic", band:"b5", track:"ic", x:784, y:142, lab:["Manager (IC)"], pos:"above"},
+  {rung:"b6ic", band:"b6", track:"ic", x:946, y:142, lab:["Senior Mgr (IC)"], pos:"above"},
   {rung:"b4p", band:"b4", track:"people", x:606, y:382, lab:["Team Lead"], pos:"below"},
   {rung:"b5p", band:"b5", track:"people", x:784, y:382, lab:["Manager"], pos:"below"},
   {rung:"b6p", band:"b6", track:"people", x:946, y:382, lab:["Senior","Manager"], pos:"below"}
 ];
 // map band of a rung -> track-skill key
 function trackSkills(rung){
-  if(rung==="b4ic")return TRACK.ic_lead;
-  if(rung==="b5ic")return TRACK.ic_senior;
+  if(rung==="b4ic")return TRACK.ic_b4;
+  if(rung==="b5ic")return TRACK.ic_b5;
+  if(rung==="b6ic")return TRACK.ic_b6;
   if(rung==="b4p")return TRACK.people_lead;
   if(rung==="b5p")return TRACK.people_senior;
   if(rung==="b6p")return TRACK.people_b6;
@@ -294,7 +313,7 @@ const DEPTS = [
   {id:"social", name:"Social Media, Community & Influencer", tick:"#E0567A",
    blurb:"Pesa's voice, community and creator partnerships across social platforms and the diaspora we serve — organic social, community care, and influencer and ambassador programmes.",
    titles:{b1:"Social Media Coordinator",b2:"Social Media Specialist",b3:"Senior Social Media Specialist",
-     b4ic:"Social Media Manager (IC)",b5ic:"Senior Social Media Manager (IC)",
+     b4ic:"Social Media Lead (IC)",b5ic:"Social Media Manager (IC)",b6ic:"Senior Social Media Manager (IC)",
      b4p:"Social Media Team Lead",b5p:"Social Media Manager",b6p:"Senior Manager, Social Media"},
    craft:{
      b1:{s:"Keeps Pesa's social presence running day-to-day under guidance.",r:["Schedule and publish on-brand posts across platforms.","Reply to comments and DMs; flag anything sensitive.","Pull basic engagement reports."],k:[["Publishing & Moderation","Posts on-brand and moderates community to the guidelines."],["Listening","Notices and logs notable comments and trends."]]},
@@ -308,7 +327,7 @@ const DEPTS = [
     {id:"influencer", label:"Influencer & Creator Partnerships", name:"Influencer & Creator Partnerships",
      blurb:"Creator, influencer and ambassador partnerships — sourcing, negotiating, running and measuring campaigns that bring diaspora senders to Pesa. A career track inside Social Media & Community.",
      titles:{b1:"Influencer Coordinator",b2:"Influencer Marketing Specialist",b3:"Senior Influencer Marketing Specialist",
-       b4ic:"Influencer Marketing Manager (IC)",b5ic:"Senior Influencer Marketing Manager (IC)",
+       b4ic:"Influencer Marketing Lead (IC)",b5ic:"Influencer Marketing Manager (IC)",b6ic:"Senior Influencer Marketing Manager (IC)",
        b4p:"Influencer & Partnerships Team Lead",b5p:"Influencer & Partnerships Manager",b6p:"Senior Manager, Influencer & Creator Partnerships"},
      craft:{
       b1:{s:"Supports creator campaigns day-to-day — sourcing, outreach, briefs and tracking.",r:["Source and vet creators against audience, corridor and brand-safety criteria.","Send briefs, collect drafts, and track deliverables and posting dates.","Log results: reach, clicks, promo-code sign-ups and first sends."],k:[["Creator Sourcing","Finds creators whose audience matches our senders, not just big follower counts."],["Campaign Admin","Keeps trackers, contracts, approvals and payments tidy."]]},
@@ -322,7 +341,7 @@ const DEPTS = [
   {id:"design", name:"Design (Brand & Creative)", tick:"#8A63D2",
    blurb:"Turns briefs and business goals into brand, campaign and product-marketing creative.",
    titles:{b1:"Junior Designer",b2:"Designer",b3:"Senior Designer",
-     b4ic:"Lead Designer / Art Director (IC)",b5ic:"Principal Designer (IC)",
+     b4ic:"Lead Designer (IC)",b5ic:"Art Director (IC)",b6ic:"Principal Designer (IC)",
      b4p:"Design Team Lead",b5p:"Design Manager",b6p:"Senior Manager, Design"},
    craft:{
      b1:{s:"Produces on-brief assets to spec and learns the brand system.",r:["Build assets to brief and spec.","Apply brand guidelines; keep files organised.","Adapt visuals to different formats."],k:[["Design Fundamentals","Composition, type, colour, hierarchy."],["Tooling & File Hygiene","Core tools and clean file structure."]]},
@@ -335,7 +354,7 @@ const DEPTS = [
   {id:"seo", name:"SEO (Organic Search)", tick:"#2E9E8F",
    blurb:"Grows qualified organic traffic across the money-movement intents that matter.",
    titles:{b1:"SEO Coordinator",b2:"SEO Specialist",b3:"Senior SEO Specialist",
-     b4ic:"SEO Manager (IC)",b5ic:"Senior SEO Manager (IC)",
+     b4ic:"SEO Lead (IC)",b5ic:"SEO Manager (IC)",b6ic:"Senior SEO Manager (IC)",
      b4p:"SEO Team Lead",b5p:"SEO Manager",b6p:"Senior Manager, SEO"},
    craft:{
      b1:{s:"Writes optimised content to brief and learns the SEO toolkit.",r:["Write and optimise content to brief.","Apply on-page basics.","Use core tools such as ahrefs."],k:[["On-page Basics","Titles, headings, structure."],["Tooling","Beginner tool use."]]},
@@ -348,7 +367,7 @@ const DEPTS = [
   {id:"performance", name:"Performance Marketing (Paid)", tick:"#E08A1E",
    blurb:"Paid acquisition and remarketing, optimised on cost-to-acquire and downstream value.",
    titles:{b1:"Performance Coordinator",b2:"Performance Marketing Specialist",b3:"Senior Performance Marketing Specialist",
-     b4ic:"Performance Marketing Manager (IC)",b5ic:"Senior Performance Marketing Manager (IC)",
+     b4ic:"Performance Marketing Lead (IC)",b5ic:"Performance Marketing Manager (IC)",b6ic:"Senior Performance Marketing Manager (IC)",
      b4p:"Performance Team Lead",b5p:"Performance Marketing Manager",b6p:"Senior Manager, Performance Marketing"},
    craft:{
      b1:{s:"Builds and runs campaigns to brief and learns the paid platforms.",r:["Build campaigns to brief.","Monitor and report the basics.","Run simple A/B tests."],k:[["Campaign Build","Sets up clean campaigns."],["Reporting","Pulls core metrics."]]},
@@ -361,7 +380,7 @@ const DEPTS = [
   {id:"comms", name:"Communications", tick:"#3B82C4",
    blurb:"Pesa's voice to employees, press and the public — internal comms, external/PR and message consistency. Internal Comms and PR are sub-tracks within the discipline.",
    titles:{b1:"Comms Coordinator",b2:"Communications Specialist",b3:"Senior Communications Specialist",
-     b4ic:"Communications Manager (IC)",b5ic:"Senior Communications Manager (IC)",
+     b4ic:"Communications Lead (IC)",b5ic:"Communications Manager (IC)",b6ic:"Senior Communications Manager (IC)",
      b4p:"Comms Team Lead",b5p:"Communications Manager",b6p:"Senior Manager, Communications"},
    craft:{
      b1:{s:"Drafts clear internal and external copy to template and learns the comms toolkit.",r:["Draft copy to template.","Help keep the intranet and news current.","Support media monitoring."],k:[["Writing","Clear copy for the channel."],["Tools","Basic comms tools such as Cision."]]},
@@ -374,7 +393,7 @@ const DEPTS = [
   {id:"growth", name:"Growth (Corridor Owners)", tick:"#0E8F6E",
    blurb:"Each Growth marketer owns a remittance corridor end-to-end — acquisition, activation and repeat-send economics. Like Remitly, we go deep into a corridor before scaling.",
    titles:{b1:"Growth Coordinator",b2:"Growth Specialist (Corridor)",b3:"Senior Growth Specialist (Corridor)",
-     b4ic:"Growth Manager (IC)",b5ic:"Senior Growth Manager (IC)",
+     b4ic:"Corridor Lead (IC)",b5ic:"Growth Manager (IC)",b6ic:"Senior Growth Manager (IC)",
      b4p:"Growth Team Lead",b5p:"Growth Manager",b6p:"Senior Manager, Growth"},
    craft:{
      b1:{s:"Supports a corridor's growth tasks and learns the levers and economics.",r:["Support corridor campaigns and experiments.","Pull corridor performance data.","Learn the corridor's audience and levers."],k:[["Corridor Basics","Learns how a corridor grows."],["Experiment Support","Helps run growth tests."]]},
@@ -387,7 +406,7 @@ const DEPTS = [
   {id:"pmm", name:"Product Marketing", tick:"#6B7FD7",
    blurb:"Turns Pesa's products into stories customers understand and choose — positioning, messaging, launches, pricing communication and competitive insight across remittance, cards, multi-currency accounts, savings, eSIM, calling and lending.",
    titles:{b1:"Product Marketing Coordinator",b2:"Product Marketing Specialist",b3:"Senior Product Marketing Specialist",
-     b4ic:"Product Marketing Manager (IC)",b5ic:"Senior Product Marketing Manager (IC)",
+     b4ic:"Product Marketing Lead (IC)",b5ic:"Product Marketing Manager (IC)",b6ic:"Senior Product Marketing Manager (IC)",
      b4p:"Product Marketing Team Lead",b5p:"Product Marketing Manager",b6p:"Senior Manager, Product Marketing"},
    craft:{
      b1:{s:"Supports launches and product content to brief and learns the product and its customers.",r:["Draft feature copy, FAQs, release notes and app-store text to brief.","Keep launch checklists, asset trackers and help content up to date.","Gather competitor screenshots, fees and FX rates for the team."],k:[["Product Knowledge","Knows how each Pesa product works and who it's for."],["Launch Support","Keeps launch tasks and assets on track."]]},
@@ -400,7 +419,7 @@ const DEPTS = [
   {id:"retention", name:"Retention & Lifecycle (Win-Back)", tick:"#D2574C",
    blurb:"Re-engages lapsed senders through lifecycle journeys — and by calling churned customers, gathering feedback, and turning it into voice-of-customer research for Growth and Product.",
    titles:{b1:"Retention Coordinator",b2:"Retention & Lifecycle Specialist",b3:"Senior Retention & Lifecycle Specialist",
-     b4ic:"Lifecycle Manager (IC)",b5ic:"Senior Lifecycle Manager (IC)",
+     b4ic:"Lifecycle Lead (IC)",b5ic:"Lifecycle Manager (IC)",b6ic:"Senior Lifecycle Manager (IC)",
      b4p:"Retention Team Lead",b5p:"Retention Manager",b6p:"Senior Manager, Retention & Lifecycle"},
    craft:{
      b1:{s:"Builds lifecycle journeys to brief, runs outreach calls, and logs feedback.",r:["Build lifecycle flows to brief.","Call lapsed customers and log feedback.","Pull basic cohort and retention reports."],k:[["Lifecycle Basics","Builds journeys in the CRM."],["Customer Outreach","Calls churned senders and records what they say."]]},
@@ -547,6 +566,46 @@ const TRACK_CTX={
 };
 function trackKey(rung){return {b4ic:"ic_lead",b5ic:"ic_senior",b4p:"people_lead",b5p:"people_senior",b6p:"people_b6"}[rung];}
 
+// IC-track craft (Lead / Manager / Senior Manager) — keyed by track id, then band
+const CRAFT_IC={
+ social:{
+  b4:{s:"The social team's deepest hands-on expert for a domain — sets the craft standard and owns the hardest campaigns, without direct reports.",r:["Own the most complex or highest-stakes social campaigns end-to-end.","Set platform standards — formats, voice, community care — that others follow.","Mentor Specialists through reviews and pairing."],k:[["Craft Leadership","Sets the bar for social craft by example."],["Platform Expertise","Knows each platform's algorithm, formats and audience cold."]]},
+  b5:{s:"Sets social strategy and standards for the discipline and owns channel performance across corridors — as an expert, not a people manager.",r:["Define the social playbook and Pesa's brand voice online.","Own social's contribution to corridor growth and report on it.","Design the community and creator programmes others run."],k:[["Social Strategy","Sets where and how Pesa shows up, and why."],["Programme Design","Designs scalable community and creator programmes."]]},
+  b6:{s:"Pesa's principal social and community authority — shapes multi-corridor strategy and how the whole business uses social, without managing a team.",r:["Set the long-range social and community direction with the function's leaders.","Lead the bets that change how Pesa shows up: new platforms, formats and markets.","Raise the bar across the department through standards, reviews and teaching."],k:[["Multi-channel Strategy","Aligns social across corridors and business goals."],["Org-wide Influence","Shapes decisions well beyond the social team."]]}},
+ influencer:{
+  b4:{s:"The go-to expert for creator campaigns — owns the toughest partnerships and sets the craft standard, without direct reports.",r:["Run the highest-value creator and ambassador campaigns end-to-end.","Set briefing, rate and usage-rights standards the team follows.","Coach Specialists on negotiation and measurement."],k:[["Partnership Craft","Runs complex, multi-deliverable creator deals."],["Rate & Rights Expertise","Prices usage, exclusivity and whitelisting with confidence."]]},
+  b5:{s:"Sets influencer strategy and standards and owns creator-led acquisition across corridors.",r:["Define the creator playbook: tiers, rate card, contract templates and disclosure rules.","Design the ambassador programme and long-term creator partnerships.","Own influencer marketing's contribution to corridor CAC."],k:[["Programme Design","Builds tiered creator and ambassador programmes."],["Creator ROI","Proves the incremental value of creator spend."]]},
+  b6:{s:"Pesa's principal authority on creator and talent partnerships — shapes talent strategy across corridors, including celebrity and music deals.",r:["Set cross-corridor creator and talent direction with leadership.","Lead the most complex talent, music sync and ambassador deals.","Raise the bar on contracts, compliance and brand safety across markets."],k:[["Talent Deals","Structures multi-party, high-value partnerships."],["Org-wide Influence","Shapes how the whole business works with creators."]]}},
+ design:{
+  b4:{s:"Leads creative on the biggest projects and sets the craft standard — the team's most trusted hands-on designer.",r:["Own creative for flagship campaigns and launches end-to-end.","Set the craft bar through critique and example.","Steward and extend the design system."],k:[["Craft Leadership","Raises quality through critique and example."],["Design System","Keeps the system coherent as it grows."]]},
+  b5:{s:"Leads creative direction across campaigns and art-directs others' work.",r:["Set creative direction for campaigns and shoots.","Art-direct contractors, photographers and other designers.","Own the design system and its governance."],k:[["Art Direction","Sets and holds the creative bar."],["Creative Strategy","Turns business goals into a creative point of view."]]},
+  b6:{s:"Pesa's principal creative authority — shapes the brand's visual identity across corridors and products.",r:["Set the visual and creative strategy for the brand.","Lead brand evolution: new identities, products and markets.","Lift the bar across design, marketing and product."],k:[["Brand Vision","Guides the visual identity across the ecosystem."],["Mastery","Knows when to bend or break the guidelines."]]}},
+ seo:{
+  b4:{s:"The team's deepest hands-on SEO expert — owns the hardest technical and content problems and sets standards.",r:["Own complex technical SEO: architecture, indexing and site speed.","Set on-page and content standards others follow.","Mentor Specialists on tools and method."],k:[["Technical Depth","Diagnoses and fixes the hardest search problems."],["Standards","Sets best practice for others."]]},
+  b5:{s:"Sets long-term SEO strategy for a domain — clusters, links and programmatic pages — and ties organic to corridor growth.",r:["Lead cluster, linking and programmatic page strategy.","Own organic's contribution to sign-ups by corridor.","Partner with Product and Engineering on site changes."],k:[["SEO Strategy","Plans the compounding play."],["Cross-functional Influence","Gets SEO work onto other teams' roadmaps."]]},
+  b6:{s:"Pesa's principal search authority — sets long-range organic and AI-search strategy across corridors and products.",r:["Set the multi-year organic direction, including AI and answer-engine search.","Lead the bets that change Pesa's search footprint.","Be the expert the whole team consults."],k:[["Long-term Strategy","Owns the multi-corridor organic plan."],["Authority","The go-to expert inside and beyond Pesa."]]}},
+ performance:{
+  b4:{s:"The team's most skilled hands-on paid marketer — owns the hardest accounts and sets testing and build standards.",r:["Run the highest-spend or most complex paid accounts.","Set campaign structure, naming and testing standards.","Mentor Specialists on optimisation and analysis."],k:[["Channel Mastery","Runs and scales the hardest paid accounts."],["Testing Rigour","Designs tests others trust."]]},
+  b5:{s:"Sets paid strategy across geographies and owns attribution and budget efficiency for a domain.",r:["Set paid strategy across corridors and channels.","Own attribution quality and incrementality testing.","Recommend budget shifts based on marginal CAC."],k:[["Paid Strategy","Plans cross-geo campaign structure."],["Measurement","Keeps attribution honest and tested."]]},
+  b6:{s:"Pesa's principal paid-media and measurement authority — owns media-mix thinking and long-range acquisition strategy.",r:["Set long-range paid and measurement direction: attribution, MMM and incrementality.","Shape how leadership allocates acquisition budget across corridors.","Raise the bar across Performance and Growth."],k:[["Measurement Strategy","Media-mix and incrementality at portfolio level."],["Scaling","Scales spend without losing efficiency."]]}},
+ comms:{
+  b4:{s:"The team's strongest hands-on communicator — writes and lands the most important stories and sets the writing standard.",r:["Own high-profile announcements, bylines and executive comms.","Set tone, style and approval standards.","Mentor Specialists on writing and pitching."],k:[["Writing Mastery","Writes the pieces that matter most."],["Media Relationships","Trusted by key journalists in our markets."]]},
+  b5:{s:"Sets messaging strategy for a domain and leads issues comms.",r:["Set messaging strategy and the core narrative.","Lead issues and early crisis comms.","Keep messaging consistent across regions."],k:[["Messaging","Owns the narrative."],["Issues Management","Handles sensitive moments."]]},
+  b6:{s:"Pesa's principal communications authority — protects and grows reputation across corridors and advises leadership.",r:["Shape the corporate narrative and reputation strategy with leadership.","Lead crisis communications.","Grow Pesa's profile with press and partners."],k:[["Crisis Comms","Leads high-pressure situations."],["Reputation","Protects and grows the brand."]]}},
+ growth:{
+  b4:{s:"Owns a major corridor end-to-end as its deepest expert — runs the hardest growth problems without direct reports.",r:["Own a major corridor's growth to target.","Run the most complex experiments and launches in it.","Mentor corridor Specialists on economics and testing."],k:[["Corridor Mastery","Knows one corridor's customers and economics cold."],["Experiment Design","Designs tests that change the plan."]]},
+  b5:{s:"Owns a portfolio of corridors or a cross-corridor growth lever, and sets the playbook others use.",r:["Own a corridor portfolio or a lever such as referrals or acquisition offers.","Set the growth playbook.","Drive repeat-send economics."],k:[["Growth Playbook","Codifies what scales a corridor."],["ROI","Drives return on corridor spend."]]},
+  b6:{s:"Pesa's principal growth authority — shapes multi-corridor strategy and new-market entry.",r:["Set multi-corridor growth direction with leadership.","Lead new-corridor and market-entry strategy.","Coach corridor owners across the team."],k:[["Portfolio Strategy","Prioritises across corridors."],["Market Entry","Turns one corridor's win into many markets."]]}},
+ pmm:{
+  b4:{s:"The team's deepest hands-on product marketer — owns the most complex launches and sets messaging standards.",r:["Own positioning and launch for a flagship product.","Set messaging and launch-quality standards.","Mentor Specialists on positioning and research."],k:[["Positioning Mastery","Positions the hardest products clearly."],["Launch Craft","Runs launches others model."]]},
+  b5:{s:"Sets the product marketing approach for a domain and owns major launches and pricing communication.",r:["Lead tier-1 launches and the launch tiering system.","Own pricing and fee communication — clear, compliant, no overpromising on FX.","Shape the roadmap with Product using market insight."],k:[["Launch Leadership","Runs high-stakes, cross-functional launches."],["Pricing Communication","Explains value and cost without confusion or risk."]]},
+  b6:{s:"Pesa's principal product marketing authority — shapes how the whole ecosystem is positioned and taken to market.",r:["Set portfolio positioning so products work as one ecosystem.","Lead go-to-market for new markets and products, such as lending or new corridors.","Change product direction with market narratives."],k:[["Portfolio Positioning","Makes many products one brand promise."],["GTM Strategy","Plans market entry and category creation."]]}},
+ retention:{
+  b4:{s:"The team's deepest lifecycle expert — builds the hardest journeys and sets CRM and research standards.",r:["Own the most complex lifecycle journeys and win-back programmes.","Set CRM, segmentation and call-research standards.","Mentor Specialists on journeys and interviewing."],k:[["Lifecycle Mastery","Builds journeys that move repeat rate."],["Research Craft","Runs customer research others trust."]]},
+  b5:{s:"Sets retention strategy for a domain and owns repeat rate and LTV.",r:["Set the retention and lifecycle strategy.","Own repeat rate and LTV by corridor.","Turn customer insight into product and growth direction."],k:[["Retention Strategy","Owns the lifecycle play."],["LTV Ownership","Drives repeat rate and value."]]},
+  b6:{s:"Pesa's principal retention and customer-insight authority — sets lifecycle strategy across corridors and products.",r:["Set cross-corridor retention direction with leadership.","Route customer insight into product and pricing decisions.","Coach the team on lifecycle and research."],k:[["Lifecycle Strategy","Owns the multi-corridor retention plan."],["Insight to Action","Routes customer insight into the business."]]}}
+};
+
 /* ============================ LEARNING ============================ */
 // Item: [type, title, by, why, url]. Search links are used so people always land on the current edition/version.
 const G=q=>"https://www.goodreads.com/search?q="+encodeURIComponent(q);
@@ -565,7 +624,7 @@ const LTYPES=[
   ["read","Articles, newsletters & reports","&#128240;"]
 ];
 // rung -> stage key
-const STAGE={b1:"found",b2:"found",b3:"adv",b4ic:"ic",b5ic:"ic",b4p:"people",b5p:"people",b6p:"people"};
+const STAGE={b1:"found",b2:"found",b3:"adv",b4ic:"ic",b5ic:"ic",b6ic:"ic",b4p:"people",b5p:"people",b6p:"people"};
 
 const LEARN={
  social:{
@@ -905,31 +964,36 @@ const LEARN_TRACK={
   ["li","Budgeting for managers","LinkedIn Learning","For the Finance & Budget competency.",L("budgeting for managers")],
   ["pod","Manager Tools","Manager Tools","Practical management, one topic at a time.",W("Manager Tools podcast")]
  ],
+ ic_b6:[
+  ["book","Staff Engineer: Leadership Beyond the Management Track","Will Larson","Written for engineers; the clearest guide to operating as a top-level IC in any discipline.",G("Staff Engineer Will Larson")],
+  ["book","The Pyramid Principle","Barbara Minto","Structuring arguments for leadership — essential when your influence is your argument.",G("The Pyramid Principle Barbara Minto")]
+ ],
  b6p:[
   ["book","Multipliers","Liz Wiseman","Leading managers so the whole function gets smarter.",G("Multipliers Liz Wiseman")],
   ["book","The First 90 Days","Michael Watkins","For taking on a new function or scope.",G("The First 90 Days Watkins")]
  ]
 };
 
-// Africa & diaspora — every role
+// Global brand & fintech — every role
+const LEARN_GLOBAL=[
+ ["book","E for Excellence: 30 Skills That Will Set You Apart, Globally","TheGlobalTemi","A practical playbook that treats excellence as a system: 30 core professional skills for standing out anywhere.","https://selar.com/eforexcellence"],
+ ["book","Building Strong Brands","David Aaker","The classic on brand equity and identity — how lasting brands are built.",G("Building Strong Brands David Aaker")],
+ ["book","How Brands Grow","Byron Sharp","Evidence-based marketing: reach, mental availability and distinctive assets.",G("How Brands Grow Byron Sharp")],
+ ["book","The Pay Off","Gottfried Leibbrandt & Natasha de Terán","How payments and money movement really work worldwide.",G("The Pay Off Leibbrandt de Teran")],
+ ["read","Mark Ritson's columns","Marketing Week","Sharp, global takes on brand, strategy and effectiveness.",W("Mark Ritson Marketing Week column")],
+ ["read","Remitly & Wise investor reports","Remitly / Wise","How the global leaders in our category talk about markets, CAC and retention.",W("Remitly investor relations quarterly results")],
+ ["read","This Week in Fintech","This Week in Fintech","Weekly roundup of global fintech news.",W("This Week in Fintech newsletter")],
+ ["pod","Fintech Insider","11:FS","Global fintech trends, products and people.",W("Fintech Insider podcast 11:FS")]
+];
+
+// Our markets: Africa & the diaspora — every role (kept short on purpose)
 const LEARN_AFRICA=[
- ["book","Africa Rising: How 900 Million African Consumers Offer More Than You Think","Vijay Mahajan & Robert E. Gunther","The classic on African consumer markets (2008 — read for the frameworks).",G("Africa Rising Vijay Mahajan")],
- ["book","Africa's Business Revolution","Acha Leke, Mutsa Chironga & Georges Desvaux","McKinsey's view of how to build and win in African markets.",G("Africa's Business Revolution")],
+ ["book","Africa's Business Revolution","Acha Leke, Mutsa Chironga & Georges Desvaux","How to build and win in African markets.",G("Africa's Business Revolution")],
+ ["book","Africa Is Not a Country","Dipo Faloyin","A corrective to treating 54 countries as one audience.",G("Africa Is Not a Country Dipo Faloyin")],
  ["book","The Next Africa","Jake Bright & Aubrey Hruby","Tech, diaspora and the new African economy.",G("The Next Africa Bright Hruby")],
- ["book","Africa Is Not a Country","Dipo Faloyin","Essential corrective to flattening 54 countries into one audience.",G("Africa Is Not a Country Dipo Faloyin")],
- ["book","Marketing to South African Consumers","James Lappeman et al. (UCT)","Free open textbook — consumer marketing written with local context at the centre.","https://openbooks.uct.ac.za/uct/catalog/book/29"],
- ["book","Contemporary Marketing Practices in Africa, Vol. 1","Palgrave","Recent scholarship on digital inclusion and reaching African consumers.","https://link.springer.com/book/10.1007/978-3-032-27126-6"],
- ["book","The Fortune at the Bottom of the Pyramid","C.K. Prahalad","Designing for value-conscious consumers.",G("The Fortune at the Bottom of the Pyramid")],
- ["book","The Pay Off","Gottfried Leibbrandt & Natasha de Terán","How payments really work — great context for any fintech marketer.",G("The Pay Off Leibbrandt de Teran")],
- ["read","Remittances in West Africa (policy paper)","UN Office of the Special Adviser on Africa","Flows, diaspora role and policy context for Nigeria, Ghana and the region.","https://www.un.org/osaa/sites/www.un.org.osaa/files/files/documents/2024/publications/23343_un_policypaper_remittanceswestafrica_v04.pdf"],
- ["read","Nigerian Diasporas in the South","IOM / ACP Observatory on Migration","Survey data on diaspora remittance behaviour and ties to home.","https://publications.iom.int/system/files/pdf/nigeria_diasporas.pdf"],
- ["read","Migration and Development Briefs","World Bank / KNOMAD","The standard remittance flow data, updated regularly.",W("World Bank KNOMAD Migration and Development Brief remittances")],
- ["read","State of the Industry Report on Mobile Money","GSMA","Annual — how money moves on the receiving end.",W("GSMA State of the Industry Report Mobile Money")],
- ["read","Lions on the Move","McKinsey Global Institute","Africa's growth and consumer outlook.",W("McKinsey Lions on the Move")],
- ["read","TechCabal & Rest of World","TechCabal / Rest of World","African and global-south tech and fintech news.",W("TechCabal fintech")],
- ["read","Africa: The Big Deal","Max Cuvellier & Maxime Bayen","Newsletter tracking African startup funding.",W("Africa The Big Deal newsletter")],
- ["yt","Peace Itimi — Founders Connect","Peace Itimi","Interviews with Black and African founders, creators and operators on how they built — plus marketing and personal-branding content.","https://www.youtube.com/@peaceitimiofficial"],
- ["pod","The Flip","Justin Norman","Long-form stories from African tech and business.",W("The Flip podcast African tech")]
+ ["read","Migration and Development Briefs","World Bank / KNOMAD","The standard data on remittance flows to our markets.",W("World Bank KNOMAD Migration and Development Brief remittances")],
+ ["read","TechCabal","TechCabal","African tech and fintech news.",W("TechCabal fintech")],
+ ["yt","Peace Itimi — Founders Connect","Peace Itimi","Interviews with Black and African founders, creators and operators on how they built — plus marketing and personal-branding content.","https://www.youtube.com/@peaceitimiofficial"]
 ];
 
 function learnHTML(d,rung){
@@ -938,6 +1002,7 @@ function learnHTML(d,rung){
   if(stage==="ic")items=items.concat(LEARN_TRACK.ic);
   if(stage==="people")items=items.concat(LEARN_TRACK.people);
   if(rung==="b6p")items=items.concat(LEARN_TRACK.b6p);
+  if(rung==="b6ic")items=items.concat(LEARN_TRACK.ic_b6);
   const card=it=>{
     const [t,n,b,w,u]=it;
     let host="";try{host=new URL(u).hostname.replace(/^www\./,"");}catch(_){}
@@ -952,11 +1017,17 @@ function learnHTML(d,rung){
   }).join("");
   const stageNote={found:"Foundation reading for Coordinators and Specialists.",adv:"For Senior Specialists approaching the fork.",
     ic:"Department depth plus the shared IC-track list.",people:"Department essentials plus the shared people-leadership list."}[stage];
+  // don't repeat anything already in the role's own list
+  const seen=new Set(items.map(x=>x[1]));
+  const fresh=list=>list.filter(x=>!seen.has(x[1]));
   return '<p class="learn-note">'+stageNote+' Links open a search so you always land on the current edition or version.</p>'+
     groups(items)+
-    '<div class="africa"><h4 class="ah">Selling to Africans &amp; the diaspora</h4>'+
-    '<p class="as">Required reading for every role at Pesa — our customers, their corridors, and how money moves home.</p>'+
-    groups(LEARN_AFRICA)+'</div>';
+    '<div class="africa"><h4 class="ah">Global brand &amp; fintech</h4>'+
+    '<p class="as">For every role — how great brands are built and how money moves worldwide.</p>'+
+    groups(fresh(LEARN_GLOBAL))+'</div>'+
+    '<div class="africa" style="margin-top:12px"><h4 class="ah">Our markets: Africa &amp; the diaspora</h4>'+
+    '<p class="as">For every role — a short list to understand the people we serve.</p>'+
+    groups(fresh(LEARN_AFRICA))+'</div>';
 }
 
 /* ============================ STATE / RENDER ============================ */
@@ -1039,29 +1110,31 @@ function mapSVG(d){
   lines+=line(470,142,606,142,"#5B6B78",3);
   lines+=line(470,382,606,382,"#DA5247",3);
   // IC line
-  lines+=line(606,142,784,142,"#5B6B78",3);
+  lines+=line(606,142,946,142,"#5B6B78",3);
   // People line
   lines+=line(606,382,946,382,"#DA5247",3);
   // beyond dashed tail
-  lines+='<line x1="946" y1="382" x2="1040" y2="382" stroke="#C7CFCB" stroke-width="3" stroke-dasharray="5 6" />';
+  lines+='<line x1="946" y1="142" x2="1050" y2="252" stroke="#C7CFCB" stroke-width="3" stroke-dasharray="5 6" />';
+  lines+='<line x1="946" y1="382" x2="1050" y2="272" stroke="#C7CFCB" stroke-width="3" stroke-dasharray="5 6" />';
   // equivalence verticals (faint dotted) at b4 and b5 columns
   lines+='<line x1="606" y1="180" x2="606" y2="344" stroke="#D7DDD9" stroke-width="2" stroke-dasharray="2 6" />';
   lines+='<line x1="784" y1="180" x2="784" y2="344" stroke="#D7DDD9" stroke-width="2" stroke-dasharray="2 6" />';
+  lines+='<line x1="946" y1="180" x2="946" y2="344" stroke="#D7DDD9" stroke-width="2" stroke-dasharray="2 6" />';
   // track labels
   let labs='<text class="tracklab" x="503" y="118" text-anchor="middle" fill="#5B6B78">IC path</text>'+
            '<text class="tracklab" x="503" y="414" text-anchor="middle" fill="#DA5247">People path</text>';
   // beyond marker (drawn lock)
-  let beyond='<circle cx="1062" cy="382" r="16" fill="#EDEFEC" stroke="#C7CFCB" stroke-width="1.5"/>'+
-             '<path d="M1058,381 v-3 a4,4 0 0 1 8,0 v3" fill="none" stroke="#8B968F" stroke-width="2"/>'+
-             '<rect x="1056" y="381" width="12" height="9" rx="2" fill="#8B968F"/>'+
-             '<text class="beyondlab" x="1062" y="350" text-anchor="middle">Beyond</text>'+
-             '<text class="beyondlab" x="1062" y="364" text-anchor="middle">the GPS</text>';
+  let beyond='<circle cx="1062" cy="262" r="16" fill="#EDEFEC" stroke="#C7CFCB" stroke-width="1.5"/>'+
+             '<path d="M1058,261 v-3 a4,4 0 0 1 8,0 v3" fill="none" stroke="#8B968F" stroke-width="2"/>'+
+             '<rect x="1056" y="261" width="12" height="9" rx="2" fill="#8B968F"/>'+
+             '<text class="beyondlab" x="1062" y="296" text-anchor="middle">Beyond</text>'+
+             '<text class="beyondlab" x="1062" y="310" text-anchor="middle">the GPS</text>';
   // nodes
   let nodes="";
   NODES.forEach(n=>{
     const sel=(n.rung===state.rung);
     const fill=TRACKHEX[n.track];
-    const labY=n.pos==="above"?(n.y-r-12):(n.y+r+20);
+    const labY=n.pos==="above"?(n.y-r-12-(n.lab.length-1)*15):(n.y+r+20);
     let labTxt="";
     n.lab.forEach((ln,i)=>{labTxt+='<tspan x="'+n.x+'" dy="'+(i===0?0:15)+'">'+esc(ln)+'</tspan>';});
     nodes+='<g class="node" data-rung="'+n.rung+'" role="button" tabindex="0" aria-label="'+esc(d.titles[n.rung])+'">';
@@ -1092,10 +1165,12 @@ function prefersReduced(){return window.matchMedia&&window.matchMedia("(prefers-
 
 function detailHTML(d,rung){
   const node=NODES.find(n=>n.rung===rung);
-  const band=node.band, tier=TIER[band];
-  const craft=d.craft[band];
+  const band=node.band, isIC=node.track==="ic";
+  const tier=(isIC&&band==="b6")?"principalIC":TIER[band];
+  const craft=(isIC&&CRAFT_IC[d.id]&&CRAFT_IC[d.id][band])||d.craft[band];
   const title=d.titles[rung];
-  const scope=BANDS[band].scope.replace("{dept}",d.name.split(" (")[0]);
+  const bandInfo=(isIC&&BANDS_IC[band])||BANDS[band];
+  const scope=bandInfo.scope.replace("{dept}",d.name.split(" (")[0]);
   // skills chips: craft + track + core
   const ts=trackSkills(rung);
   const craftSk=craft.k, coreSk=CORE.map(c=>[c[0],c[1][tier]]);
@@ -1129,7 +1204,7 @@ function detailHTML(d,rung){
     '<div class="d-body">'+
       '<div class="sec"><h3>Job summary</h3><p>'+esc(craft.s)+' '+esc(scope)+'</p></div>'+
       '<div class="sec"><h3>What you own</h3><ul class="own">'+own+'</ul></div>'+
-      '<div class="sec"><h3>Experience</h3><p>'+esc(BANDS[band].exp)+'</p></div>'+
+      '<div class="sec"><h3>Experience</h3><p>'+esc(bandInfo.exp)+'</p></div>'+
       '<div class="sec"><h3>Skills</h3><div class="chips">'+chips+'</div></div>'+
       '<div class="sec"><h3>Detailed skill description</h3>'+acc+'</div>'+
       '<div class="sec"><h3>Recommended learning</h3>'+learnHTML(d,rung)+'</div>'+
@@ -1154,7 +1229,7 @@ function overviewHTML(){
     '<div class="ov-card"><h3>Two tracks, one map</h3>'+
       '<p>Everyone starts on a shared foundation: <b>Coordinator &rarr; Specialist &rarr; Senior Specialist</b>. At the end of Senior Specialist the road forks.</p>'+
       '<p><b style="color:#5B6B78">IC track</b> — master the craft and set the standard, no direct reports. <b style="color:#DA5247">People track</b> — grow outcomes by leading a team.</p>'+
-      '<p>The tracks are parallel, not a hierarchy: a Senior Manager (IC) is a peer of a People Manager, at equal band and reward.</p></div>'+
+      '<p>The tracks are parallel, not a hierarchy: each IC rung is a peer of the People rung at the same band — Lead (IC) and Team Lead, Manager (IC) and Manager, Senior Manager (IC) and Senior Manager — at equal band and reward.</p></div>'+
     '<div class="ov-card"><h3>How you move</h3>'+
       '<p>Promotion is earned on two tests, not on tenure:</p>'+
       '<ol class="two-tests"><li><b>Threshold</b> — sustained strong performance and enough time to show the next band is your new normal.</li>'+
@@ -1164,9 +1239,9 @@ function overviewHTML(){
       bandRow("B1","Coordinator","—","Executes defined tasks with supervision; learning the craft and the business.")+
       bandRow("B2","Specialist","—","Owns a channel or area and runs it independently against clear goals.")+
       bandRow("B3","Senior Specialist","—","Owns outcomes across a channel or corridor; mentors juniors. Fork point.")+
-      bandRow("B4","Manager (IC)","Team Lead","Sets the approach for a domain. IC: deep expert. Lead: runs a small team.")+
-      bandRow("B5","Senior Manager (IC)","Manager","Authority for a craft / sub-function. Manager owns a sub-function and its people.")+
-      bandRow("B6","—","Senior Manager","Owns a marketing function, its strategy and multiple teams.")+
+      bandRow("B4","Lead (IC)","Team Lead","Sets the approach for a domain. IC: the deepest hands-on expert. Team Lead: runs a small team.")+
+      bandRow("B5","Manager (IC)","Manager","Sets strategy for a craft or sub-function — IC as the expert, Manager through a team.")+
+      bandRow("B6","Senior Manager (IC)","Senior Manager","IC: principal authority for the discipline. Senior Manager: owns the function and its teams.")+
       '</tbody></table></div>'+
     '<div class="ov-card span gate"><h3>&#128274;&nbsp; Beyond the GPS</h3>'+
       '<p>Director, Head of Corridors, Head of Marketing and VP sit <b>above</b> this map. Reaching Band 6 does not entitle anyone to them — these roles are <b>appointed, not promoted into</b>, based on whether the business needs the seat, C-suite judgement on readiness and team shape, character and leadership, and strategic need in a corridor or function.</p>'+
